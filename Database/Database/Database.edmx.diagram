@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="078356ce46b348699a3b371d7f9f5b8d" Name="Diagram1">
+        <EntityTypeShape EntityType="Filmy.Filmy" Width="1.5" PointX="0.75" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="Filmy.Rezerwacje" Width="1.5" PointX="5.25" PointY="1.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="Filmy.RezerwacjeMiejsca" Width="1.5" PointX="7.5" PointY="1.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="Filmy.Sale" Width="1.5" PointX="0.75" PointY="5.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="Filmy.Seanse" Width="1.5" PointX="3" PointY="1.125" IsExpanded="true" />
+        <AssociationConnector Association="Filmy.FK__Seanse__FilmID__145C0A3F" ManuallyRouted="false" />
+        <AssociationConnector Association="Filmy.FK__Rezerwacj__Rezer__1B0907CE" ManuallyRouted="false" />
+        <AssociationConnector Association="Filmy.FK__Rezerwacj__Seans__182C9B23" ManuallyRouted="false" />
+        <AssociationConnector Association="Filmy.FK__Seanse__SalaID__15502E78" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
