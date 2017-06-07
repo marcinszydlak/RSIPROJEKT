@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="Filmy.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="Database.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Filmy">
           <Key>
             <PropertyRef Name="FilmID" />
@@ -18,12 +18,23 @@
           <Property Name="Ocena" Type="decimal" Precision="12" Scale="2" Nullable="false" />
           <Property Name="Zdjecie" Type="varbinary" MaxLength="1" />
         </EntityType>
+        <EntityType Name="Klienci">
+          <Key>
+            <PropertyRef Name="KlientID" />
+          </Key>
+          <Property Name="KlientID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Imie" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Nazwisko" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Login" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Haslo" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
         <EntityType Name="Rezerwacje">
           <Key>
             <PropertyRef Name="RezerwacjaID" />
           </Key>
           <Property Name="RezerwacjaID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="SeansID" Type="int" />
+          <Property Name="SeansID" Type="int" Nullable="false" />
+          <Property Name="KlientID" Type="int" Nullable="false" />
           <Property Name="DataRezerwacji" Type="datetime" Nullable="false" />
         </EntityType>
         <EntityType Name="RezerwacjeMiejsca">
@@ -31,7 +42,7 @@
             <PropertyRef Name="RezerwacjaMiejsceID" />
           </Key>
           <Property Name="RezerwacjaMiejsceID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="RezerwacjaID" Type="int" />
+          <Property Name="RezerwacjaID" Type="int" Nullable="false" />
           <Property Name="Rzad" Type="int" Nullable="false" />
           <Property Name="Miejsce" Type="int" Nullable="false" />
         </EntityType>
@@ -48,12 +59,24 @@
             <PropertyRef Name="SeansID" />
           </Key>
           <Property Name="SeansID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="FilmID" Type="int" />
+          <Property Name="FilmID" Type="int" Nullable="false" />
           <Property Name="DataSeansu" Type="datetime" Nullable="false" />
-          <Property Name="SalaID" Type="int" />
+          <Property Name="SalaID" Type="int" Nullable="false" />
         </EntityType>
-        <Association Name="FK__Rezerwacj__Rezer__1B0907CE">
-          <End Role="Rezerwacje" Type="Self.Rezerwacje" Multiplicity="0..1" />
+        <Association Name="FK__Rezerwacj__Klien__5BE2A6F2">
+          <End Role="Klienci" Type="Self.Klienci" Multiplicity="1" />
+          <End Role="Rezerwacje" Type="Self.Rezerwacje" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Klienci">
+              <PropertyRef Name="KlientID" />
+            </Principal>
+            <Dependent Role="Rezerwacje">
+              <PropertyRef Name="KlientID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Rezerwacj__Rezer__5EBF139D">
+          <End Role="Rezerwacje" Type="Self.Rezerwacje" Multiplicity="1" />
           <End Role="RezerwacjeMiejsca" Type="Self.RezerwacjeMiejsca" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Rezerwacje">
@@ -64,8 +87,8 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Rezerwacj__Seans__182C9B23">
-          <End Role="Seanse" Type="Self.Seanse" Multiplicity="0..1" />
+        <Association Name="FK__Rezerwacj__Seans__5AEE82B9">
+          <End Role="Seanse" Type="Self.Seanse" Multiplicity="1" />
           <End Role="Rezerwacje" Type="Self.Rezerwacje" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Seanse">
@@ -76,8 +99,8 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Seanse__FilmID__145C0A3F">
-          <End Role="Filmy" Type="Self.Filmy" Multiplicity="0..1" />
+        <Association Name="FK__Seanse__FilmID__571DF1D5">
+          <End Role="Filmy" Type="Self.Filmy" Multiplicity="1" />
           <End Role="Seanse" Type="Self.Seanse" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Filmy">
@@ -88,8 +111,8 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Seanse__SalaID__15502E78">
-          <End Role="Sale" Type="Self.Sale" Multiplicity="0..1" />
+        <Association Name="FK__Seanse__SalaID__5812160E">
+          <End Role="Sale" Type="Self.Sale" Multiplicity="1" />
           <End Role="Seanse" Type="Self.Seanse" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Sale">
@@ -100,25 +123,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="FilmyStoreContainer">
+        <EntityContainer Name="DatabaseStoreContainer">
           <EntitySet Name="Filmy" EntityType="Self.Filmy" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Klienci" EntityType="Self.Klienci" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Rezerwacje" EntityType="Self.Rezerwacje" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RezerwacjeMiejsca" EntityType="Self.RezerwacjeMiejsca" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Sale" EntityType="Self.Sale" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Seanse" EntityType="Self.Seanse" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK__Rezerwacj__Rezer__1B0907CE" Association="Self.FK__Rezerwacj__Rezer__1B0907CE">
+          <AssociationSet Name="FK__Rezerwacj__Klien__5BE2A6F2" Association="Self.FK__Rezerwacj__Klien__5BE2A6F2">
+            <End Role="Klienci" EntitySet="Klienci" />
+            <End Role="Rezerwacje" EntitySet="Rezerwacje" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Rezerwacj__Rezer__5EBF139D" Association="Self.FK__Rezerwacj__Rezer__5EBF139D">
             <End Role="Rezerwacje" EntitySet="Rezerwacje" />
             <End Role="RezerwacjeMiejsca" EntitySet="RezerwacjeMiejsca" />
           </AssociationSet>
-          <AssociationSet Name="FK__Rezerwacj__Seans__182C9B23" Association="Self.FK__Rezerwacj__Seans__182C9B23">
+          <AssociationSet Name="FK__Rezerwacj__Seans__5AEE82B9" Association="Self.FK__Rezerwacj__Seans__5AEE82B9">
             <End Role="Seanse" EntitySet="Seanse" />
             <End Role="Rezerwacje" EntitySet="Rezerwacje" />
           </AssociationSet>
-          <AssociationSet Name="FK__Seanse__FilmID__145C0A3F" Association="Self.FK__Seanse__FilmID__145C0A3F">
+          <AssociationSet Name="FK__Seanse__FilmID__571DF1D5" Association="Self.FK__Seanse__FilmID__571DF1D5">
             <End Role="Filmy" EntitySet="Filmy" />
             <End Role="Seanse" EntitySet="Seanse" />
           </AssociationSet>
-          <AssociationSet Name="FK__Seanse__SalaID__15502E78" Association="Self.FK__Seanse__SalaID__15502E78">
+          <AssociationSet Name="FK__Seanse__SalaID__5812160E" Association="Self.FK__Seanse__SalaID__5812160E">
             <End Role="Sale" EntitySet="Sale" />
             <End Role="Seanse" EntitySet="Seanse" />
           </AssociationSet>
@@ -127,7 +155,7 @@
     </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema Namespace="Filmy" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+      <Schema Namespace="Database" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityType Name="Filmy">
           <Key>
             <PropertyRef Name="FilmID" />
@@ -140,27 +168,40 @@
           <Property Name="Opis" Type="String" MaxLength="500" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Ocena" Type="Decimal" Precision="12" Scale="2" Nullable="false" />
           <Property Name="Zdjecie" Type="Binary" MaxLength="1" FixedLength="false" />
-          <NavigationProperty Name="Seanse" Relationship="Self.FK__Seanse__FilmID__145C0A3F" FromRole="Filmy" ToRole="Seanse" />
+          <NavigationProperty Name="Seanse" Relationship="Self.FK__Seanse__FilmID__571DF1D5" FromRole="Filmy" ToRole="Seanse" />
+        </EntityType>
+        <EntityType Name="Klienci">
+          <Key>
+            <PropertyRef Name="KlientID" />
+          </Key>
+          <Property Name="KlientID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Imie" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Nazwisko" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Login" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Haslo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Rezerwacje" Relationship="Self.FK__Rezerwacj__Klien__5BE2A6F2" FromRole="Klienci" ToRole="Rezerwacje" />
         </EntityType>
         <EntityType Name="Rezerwacje">
           <Key>
             <PropertyRef Name="RezerwacjaID" />
           </Key>
           <Property Name="RezerwacjaID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="SeansID" Type="Int32" />
+          <Property Name="SeansID" Type="Int32" Nullable="false" />
+          <Property Name="KlientID" Type="Int32" Nullable="false" />
           <Property Name="DataRezerwacji" Type="DateTime" Nullable="false" Precision="3" />
-          <NavigationProperty Name="RezerwacjeMiejsca" Relationship="Self.FK__Rezerwacj__Rezer__1B0907CE" FromRole="Rezerwacje" ToRole="RezerwacjeMiejsca" />
-          <NavigationProperty Name="Seanse" Relationship="Self.FK__Rezerwacj__Seans__182C9B23" FromRole="Rezerwacje" ToRole="Seanse" />
+          <NavigationProperty Name="Klienci" Relationship="Self.FK__Rezerwacj__Klien__5BE2A6F2" FromRole="Rezerwacje" ToRole="Klienci" />
+          <NavigationProperty Name="RezerwacjeMiejsca" Relationship="Self.FK__Rezerwacj__Rezer__5EBF139D" FromRole="Rezerwacje" ToRole="RezerwacjeMiejsca" />
+          <NavigationProperty Name="Seanse" Relationship="Self.FK__Rezerwacj__Seans__5AEE82B9" FromRole="Rezerwacje" ToRole="Seanse" />
         </EntityType>
         <EntityType Name="RezerwacjeMiejsca">
           <Key>
             <PropertyRef Name="RezerwacjaMiejsceID" />
           </Key>
           <Property Name="RezerwacjaMiejsceID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="RezerwacjaID" Type="Int32" />
+          <Property Name="RezerwacjaID" Type="Int32" Nullable="false" />
           <Property Name="Rzad" Type="Int32" Nullable="false" />
           <Property Name="Miejsce" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Rezerwacje" Relationship="Self.FK__Rezerwacj__Rezer__1B0907CE" FromRole="RezerwacjeMiejsca" ToRole="Rezerwacje" />
+          <NavigationProperty Name="Rezerwacje" Relationship="Self.FK__Rezerwacj__Rezer__5EBF139D" FromRole="RezerwacjeMiejsca" ToRole="Rezerwacje" />
         </EntityType>
         <EntityType Name="Sale">
           <Key>
@@ -169,22 +210,22 @@
           <Property Name="SalaID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="IloscRzedow" Type="Int32" Nullable="false" />
           <Property Name="IloscMiejscWRzedzie" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Seanse" Relationship="Self.FK__Seanse__SalaID__15502E78" FromRole="Sale" ToRole="Seanse" />
+          <NavigationProperty Name="Seanse" Relationship="Self.FK__Seanse__SalaID__5812160E" FromRole="Sale" ToRole="Seanse" />
         </EntityType>
         <EntityType Name="Seanse">
           <Key>
             <PropertyRef Name="SeansID" />
           </Key>
           <Property Name="SeansID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="FilmID" Type="Int32" />
+          <Property Name="FilmID" Type="Int32" Nullable="false" />
           <Property Name="DataSeansu" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="SalaID" Type="Int32" />
-          <NavigationProperty Name="Filmy" Relationship="Self.FK__Seanse__FilmID__145C0A3F" FromRole="Seanse" ToRole="Filmy" />
-          <NavigationProperty Name="Rezerwacje" Relationship="Self.FK__Rezerwacj__Seans__182C9B23" FromRole="Seanse" ToRole="Rezerwacje" />
-          <NavigationProperty Name="Sale" Relationship="Self.FK__Seanse__SalaID__15502E78" FromRole="Seanse" ToRole="Sale" />
+          <Property Name="SalaID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Filmy" Relationship="Self.FK__Seanse__FilmID__571DF1D5" FromRole="Seanse" ToRole="Filmy" />
+          <NavigationProperty Name="Rezerwacje" Relationship="Self.FK__Rezerwacj__Seans__5AEE82B9" FromRole="Seanse" ToRole="Rezerwacje" />
+          <NavigationProperty Name="Sale" Relationship="Self.FK__Seanse__SalaID__5812160E" FromRole="Seanse" ToRole="Sale" />
         </EntityType>
-        <Association Name="FK__Seanse__FilmID__145C0A3F">
-          <End Role="Filmy" Type="Self.Filmy" Multiplicity="0..1" />
+        <Association Name="FK__Seanse__FilmID__571DF1D5">
+          <End Role="Filmy" Type="Self.Filmy" Multiplicity="1" />
           <End Role="Seanse" Type="Self.Seanse" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Filmy">
@@ -195,8 +236,20 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Rezerwacj__Rezer__1B0907CE">
-          <End Role="Rezerwacje" Type="Self.Rezerwacje" Multiplicity="0..1" />
+        <Association Name="FK__Rezerwacj__Klien__5BE2A6F2">
+          <End Role="Klienci" Type="Self.Klienci" Multiplicity="1" />
+          <End Role="Rezerwacje" Type="Self.Rezerwacje" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Klienci">
+              <PropertyRef Name="KlientID" />
+            </Principal>
+            <Dependent Role="Rezerwacje">
+              <PropertyRef Name="KlientID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Rezerwacj__Rezer__5EBF139D">
+          <End Role="Rezerwacje" Type="Self.Rezerwacje" Multiplicity="1" />
           <End Role="RezerwacjeMiejsca" Type="Self.RezerwacjeMiejsca" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Rezerwacje">
@@ -207,8 +260,8 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Rezerwacj__Seans__182C9B23">
-          <End Role="Seanse" Type="Self.Seanse" Multiplicity="0..1" />
+        <Association Name="FK__Rezerwacj__Seans__5AEE82B9">
+          <End Role="Seanse" Type="Self.Seanse" Multiplicity="1" />
           <End Role="Rezerwacje" Type="Self.Rezerwacje" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Seanse">
@@ -219,8 +272,8 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Seanse__SalaID__15502E78">
-          <End Role="Sale" Type="Self.Sale" Multiplicity="0..1" />
+        <Association Name="FK__Seanse__SalaID__5812160E">
+          <End Role="Sale" Type="Self.Sale" Multiplicity="1" />
           <End Role="Seanse" Type="Self.Seanse" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Sale">
@@ -233,23 +286,28 @@
         </Association>
         <EntityContainer Name="FilmyEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Filmy" EntityType="Self.Filmy" />
+          <EntitySet Name="Klienci" EntityType="Self.Klienci" />
           <EntitySet Name="Rezerwacje" EntityType="Self.Rezerwacje" />
           <EntitySet Name="RezerwacjeMiejsca" EntityType="Self.RezerwacjeMiejsca" />
           <EntitySet Name="Sale" EntityType="Self.Sale" />
           <EntitySet Name="Seanse" EntityType="Self.Seanse" />
-          <AssociationSet Name="FK__Seanse__FilmID__145C0A3F" Association="Self.FK__Seanse__FilmID__145C0A3F">
+          <AssociationSet Name="FK__Seanse__FilmID__571DF1D5" Association="Self.FK__Seanse__FilmID__571DF1D5">
             <End Role="Filmy" EntitySet="Filmy" />
             <End Role="Seanse" EntitySet="Seanse" />
           </AssociationSet>
-          <AssociationSet Name="FK__Rezerwacj__Rezer__1B0907CE" Association="Self.FK__Rezerwacj__Rezer__1B0907CE">
+          <AssociationSet Name="FK__Rezerwacj__Klien__5BE2A6F2" Association="Self.FK__Rezerwacj__Klien__5BE2A6F2">
+            <End Role="Klienci" EntitySet="Klienci" />
+            <End Role="Rezerwacje" EntitySet="Rezerwacje" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Rezerwacj__Rezer__5EBF139D" Association="Self.FK__Rezerwacj__Rezer__5EBF139D">
             <End Role="Rezerwacje" EntitySet="Rezerwacje" />
             <End Role="RezerwacjeMiejsca" EntitySet="RezerwacjeMiejsca" />
           </AssociationSet>
-          <AssociationSet Name="FK__Rezerwacj__Seans__182C9B23" Association="Self.FK__Rezerwacj__Seans__182C9B23">
+          <AssociationSet Name="FK__Rezerwacj__Seans__5AEE82B9" Association="Self.FK__Rezerwacj__Seans__5AEE82B9">
             <End Role="Seanse" EntitySet="Seanse" />
             <End Role="Rezerwacje" EntitySet="Rezerwacje" />
           </AssociationSet>
-          <AssociationSet Name="FK__Seanse__SalaID__15502E78" Association="Self.FK__Seanse__SalaID__15502E78">
+          <AssociationSet Name="FK__Seanse__SalaID__5812160E" Association="Self.FK__Seanse__SalaID__5812160E">
             <End Role="Sale" EntitySet="Sale" />
             <End Role="Seanse" EntitySet="Seanse" />
           </AssociationSet>
@@ -259,9 +317,9 @@
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="FilmyStoreContainer" CdmEntityContainer="FilmyEntities">
+        <EntityContainerMapping StorageEntityContainer="DatabaseStoreContainer" CdmEntityContainer="FilmyEntities">
           <EntitySetMapping Name="Filmy">
-            <EntityTypeMapping TypeName="Filmy.Filmy">
+            <EntityTypeMapping TypeName="Database.Filmy">
               <MappingFragment StoreEntitySet="Filmy">
                 <ScalarProperty Name="FilmID" ColumnName="FilmID" />
                 <ScalarProperty Name="Tytul" ColumnName="Tytul" />
@@ -274,17 +332,29 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Klienci">
+            <EntityTypeMapping TypeName="Database.Klienci">
+              <MappingFragment StoreEntitySet="Klienci">
+                <ScalarProperty Name="KlientID" ColumnName="KlientID" />
+                <ScalarProperty Name="Imie" ColumnName="Imie" />
+                <ScalarProperty Name="Nazwisko" ColumnName="Nazwisko" />
+                <ScalarProperty Name="Login" ColumnName="Login" />
+                <ScalarProperty Name="Haslo" ColumnName="Haslo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Rezerwacje">
-            <EntityTypeMapping TypeName="Filmy.Rezerwacje">
+            <EntityTypeMapping TypeName="Database.Rezerwacje">
               <MappingFragment StoreEntitySet="Rezerwacje">
                 <ScalarProperty Name="RezerwacjaID" ColumnName="RezerwacjaID" />
                 <ScalarProperty Name="SeansID" ColumnName="SeansID" />
+                <ScalarProperty Name="KlientID" ColumnName="KlientID" />
                 <ScalarProperty Name="DataRezerwacji" ColumnName="DataRezerwacji" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="RezerwacjeMiejsca">
-            <EntityTypeMapping TypeName="Filmy.RezerwacjeMiejsca">
+            <EntityTypeMapping TypeName="Database.RezerwacjeMiejsca">
               <MappingFragment StoreEntitySet="RezerwacjeMiejsca">
                 <ScalarProperty Name="RezerwacjaMiejsceID" ColumnName="RezerwacjaMiejsceID" />
                 <ScalarProperty Name="RezerwacjaID" ColumnName="RezerwacjaID" />
@@ -294,7 +364,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Sale">
-            <EntityTypeMapping TypeName="Filmy.Sale">
+            <EntityTypeMapping TypeName="Database.Sale">
               <MappingFragment StoreEntitySet="Sale">
                 <ScalarProperty Name="SalaID" ColumnName="SalaID" />
                 <ScalarProperty Name="IloscRzedow" ColumnName="IloscRzedow" />
@@ -303,7 +373,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Seanse">
-            <EntityTypeMapping TypeName="Filmy.Seanse">
+            <EntityTypeMapping TypeName="Database.Seanse">
               <MappingFragment StoreEntitySet="Seanse">
                 <ScalarProperty Name="SeansID" ColumnName="SeansID" />
                 <ScalarProperty Name="FilmID" ColumnName="FilmID" />

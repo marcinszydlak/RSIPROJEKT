@@ -15,7 +15,7 @@ namespace Database
     public partial class RezerwacjeMiejsca
     {
         public int RezerwacjaMiejsceID { get; set; }
-        public Nullable<int> RezerwacjaID { get; set; }
+        public int RezerwacjaID { get; set; }
         public int Rzad { get; set; }
         public int Miejsce { get; set; }
     

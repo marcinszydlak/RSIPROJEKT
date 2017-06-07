@@ -69,6 +69,9 @@
     <Compile Include="Filmy.cs">
       <DependentUpon>Database.tt</DependentUpon>
     </Compile>
+    <Compile Include="Klienci.cs">
+      <DependentUpon>Database.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rezerwacje.cs">
       <DependentUpon>Database.tt</DependentUpon>

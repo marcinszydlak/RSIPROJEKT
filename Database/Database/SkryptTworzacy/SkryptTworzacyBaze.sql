@@ -1,8 +1,9 @@
-﻿--DROP TABLE RezerwacjeMiejsca;
---DROP TABLE Rezerwacje;
---DROP TABLE Seanse;
---DROP TABLE Sale;
---DROP TABLE Filmy;
+﻿DROP TABLE RezerwacjeMiejsca;
+DROP TABLE Rezerwacje;
+DROP TABLE Seanse;
+DROP TABLE Sale;
+DROP TABLE Klienci;
+DROP TABLE Filmy;
 CREATE TABLE Filmy
 (
 	FilmID int IDENTITY(1,1) PRIMARY KEY,
@@ -14,6 +15,14 @@ CREATE TABLE Filmy
 	Ocena decimal(12,2) NOT NULL,
 	Zdjecie varbinary NULL
 );
+CREATE TABLE Klienci
+(
+	KlientID int IDENTITY(1,1) PRIMARY KEY, 
+	Imie varchar(50) NOT NULL,
+	Nazwisko varchar(50) NOT NULL,
+	Login varchar(50) NOT NULL,
+	Haslo varchar(50) NOT NULL
+);
 CREATE TABLE Sale
 (
 	SalaID int IDENTITY(1,1) PRIMARY KEY,
@@ -23,20 +32,21 @@ CREATE TABLE Sale
 CREATE TABLE Seanse
 (
 	SeansID int IDENTITY(1,1) PRIMARY KEY,
-	FilmID int FOREIGN KEY REFERENCES Filmy(FilmID),
+	FilmID int NOT NULL FOREIGN KEY REFERENCES Filmy(FilmID),
 	DataSeansu datetime NOT NULL,
-	SalaID int FOREIGN KEY REFERENCES Sale(SalaID)
+	SalaID int NOT NULL FOREIGN KEY REFERENCES Sale(SalaID)
 );
 CREATE TABLE Rezerwacje
 (
 	RezerwacjaID int IDENTITY(1,1) PRIMARY KEY,
-	SeansID int FOREIGN KEY REFERENCES Seanse(SeansID),
+	SeansID int NOT NULL FOREIGN KEY REFERENCES Seanse(SeansID) ,
+	KlientID int NOT NULL FOREIGN KEY REFERENCES Klienci(KlientID),
 	DataRezerwacji datetime NOT NULL
 );
 CREATE TABLE RezerwacjeMiejsca
 (
 	RezerwacjaMiejsceID int IDENTITY(1,1) PRIMARY KEY,
-	RezerwacjaID int FOREIGN KEY REFERENCES Rezerwacje(RezerwacjaID),
+	RezerwacjaID int NOT NULL FOREIGN KEY REFERENCES Rezerwacje(RezerwacjaID),
 	Rzad int NOT NULL,
 	Miejsce int NOT NULL
 );
@@ -46,6 +56,11 @@ INSERT INTO Filmy(Tytul,Rezyser,RokWydania,Obsada,Opis,Ocena) VALUES
 ('Rambo II', 'George Pan Cosmatos', 1985, 'Sylvester Stallone, Richard Crenna, Charles Napier, Steven Berkoff','Dramat wojenny',7.49),
 ('Rambo III',' 	Peter MacDonald', 1988, 'Sylvester Stallone, Richard Crenna, Charles Napier, Marc de Jonge','Dramat sensacyjny',8.02),
 ('John Rambo','Sylvester Stallone',2008,'Sylvester Stallone, Julie Benz','Dramat sensacyjny',9.04);
+INSERT INTO Klienci (Imie,Nazwisko,Login,Haslo) VALUES
+('Adam','Adamski','AAdamski','AAA'),
+('Bartosz','Bartoszewski','BBartoszewski','BBB'),
+('Cezary','Czarkowski','CCzarkowski','CCC'),
+('Damian','Damka','DDamka','DDD');
 INSERT INTO Sale(IloscRzedow,IloscMiejscWRzedzie) VALUES
 (12,18),(10,20),(16,24)
 INSERT INTO Seanse(FilmID,DataSeansu,SalaID) VALUES
@@ -57,18 +72,18 @@ INSERT INTO Seanse(FilmID,DataSeansu,SalaID) VALUES
 (3,'20170602',3),
 (1,'20170602',3),
 (1,'20170603',3)
-INSERT INTO Rezerwacje(SeansID,DataRezerwacji) VALUES
-(1,GETDATE()),
-(1,GETDATE()),
-(1,GETDATE()),
-(1,GETDATE()),
-(2,GETDATE()),
-(2,GETDATE()),
-(2,GETDATE()),
-(2,GETDATE()),
-(2,GETDATE()),
-(3,GETDATE()),
-(3,GETDATE())
+INSERT INTO Rezerwacje(SeansID,DataRezerwacji,KlientID) VALUES
+(1,GETDATE(),1),
+(1,GETDATE(),2),
+(1,GETDATE(),3),
+(1,GETDATE(),4),
+(2,GETDATE(),1),
+(2,GETDATE(),2),
+(2,GETDATE(),3),
+(2,GETDATE(),4),
+(2,GETDATE(),1),
+(3,GETDATE(),2),
+(3,GETDATE(),3)
 INSERT INTO RezerwacjeMiejsca(RezerwacjaID,Rzad,Miejsce) VALUES
 (1,1,2),
 (1,1,3),

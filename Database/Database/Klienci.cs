@@ -12,22 +12,21 @@ namespace Database
     using System;
     using System.Collections.Generic;
     
-    public partial class Rezerwacje
+    public partial class Klienci
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Rezerwacje()
+        public Klienci()
         {
-            this.RezerwacjeMiejsca = new HashSet<RezerwacjeMiejsca>();
+            this.Rezerwacje = new HashSet<Rezerwacje>();
         }
     
-        public int RezerwacjaID { get; set; }
-        public int SeansID { get; set; }
         public int KlientID { get; set; }
-        public System.DateTime DataRezerwacji { get; set; }
+        public string Imie { get; set; }
+        public string Nazwisko { get; set; }
+        public string Login { get; set; }
+        public string Haslo { get; set; }
     
-        public virtual Klienci Klienci { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<RezerwacjeMiejsca> RezerwacjeMiejsca { get; set; }
-        public virtual Seanse Seanse { get; set; }
+        public virtual ICollection<Rezerwacje> Rezerwacje { get; set; }
     }
 }

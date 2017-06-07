@@ -15,6 +15,8 @@ namespace Common.Models
         [DataMember]
         public int SeanceID { get; set; }
         [DataMember]
+        public int ClientID { get; set; }
+        [DataMember]
         public DateTime ReservationDate { get; set; }
         [DataMember]
         public List<ReservationPositionModel> ReservationInfo { get; set; }

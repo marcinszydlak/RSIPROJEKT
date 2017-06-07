@@ -4,16 +4,18 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="078356ce46b348699a3b371d7f9f5b8d" Name="Diagram1">
-        <EntityTypeShape EntityType="Filmy.Filmy" Width="1.5" PointX="0.75" PointY="1" IsExpanded="true" />
-        <EntityTypeShape EntityType="Filmy.Rezerwacje" Width="1.5" PointX="5.25" PointY="1.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="Filmy.RezerwacjeMiejsca" Width="1.5" PointX="7.5" PointY="1.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="Filmy.Sale" Width="1.5" PointX="0.75" PointY="5.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="Filmy.Seanse" Width="1.5" PointX="3" PointY="1.125" IsExpanded="true" />
-        <AssociationConnector Association="Filmy.FK__Seanse__FilmID__145C0A3F" ManuallyRouted="false" />
-        <AssociationConnector Association="Filmy.FK__Rezerwacj__Rezer__1B0907CE" ManuallyRouted="false" />
-        <AssociationConnector Association="Filmy.FK__Rezerwacj__Seans__182C9B23" ManuallyRouted="false" />
-        <AssociationConnector Association="Filmy.FK__Seanse__SalaID__15502E78" ManuallyRouted="false" />
+      <Diagram DiagramId="45301fa861714f3ba1b4bc81e875be32" Name="Diagram1">
+        <EntityTypeShape EntityType="Database.Filmy" Width="1.5" PointX="0.75" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="Database.Klienci" Width="1.5" PointX="3" PointY="5.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="Database.Rezerwacje" Width="1.5" PointX="5.25" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="Database.RezerwacjeMiejsca" Width="1.5" PointX="7.5" PointY="1.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="Database.Sale" Width="1.5" PointX="0.75" PointY="5.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="Database.Seanse" Width="1.5" PointX="3" PointY="1.125" IsExpanded="true" />
+        <AssociationConnector Association="Database.FK__Seanse__FilmID__571DF1D5" ManuallyRouted="false" />
+        <AssociationConnector Association="Database.FK__Rezerwacj__Klien__5BE2A6F2" ManuallyRouted="false" />
+        <AssociationConnector Association="Database.FK__Rezerwacj__Rezer__5EBF139D" ManuallyRouted="false" />
+        <AssociationConnector Association="Database.FK__Rezerwacj__Seans__5AEE82B9" ManuallyRouted="false" />
+        <AssociationConnector Association="Database.FK__Seanse__SalaID__5812160E" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

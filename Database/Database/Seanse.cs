@@ -21,9 +21,9 @@ namespace Database
         }
     
         public int SeansID { get; set; }
-        public Nullable<int> FilmID { get; set; }
+        public int FilmID { get; set; }
         public System.DateTime DataSeansu { get; set; }
-        public Nullable<int> SalaID { get; set; }
+        public int SalaID { get; set; }
     
         public virtual Filmy Filmy { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

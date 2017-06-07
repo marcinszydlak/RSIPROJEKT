@@ -26,6 +26,7 @@ namespace Database
         }
     
         public virtual DbSet<Filmy> Filmy { get; set; }
+        public virtual DbSet<Klienci> Klienci { get; set; }
         public virtual DbSet<Rezerwacje> Rezerwacje { get; set; }
         public virtual DbSet<RezerwacjeMiejsca> RezerwacjeMiejsca { get; set; }
         public virtual DbSet<Sale> Sale { get; set; }
