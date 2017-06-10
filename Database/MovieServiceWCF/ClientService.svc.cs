@@ -14,95 +14,210 @@ namespace MovieServiceWCF
     // NOTE: In order to launch WCF Test Client for testing this service, please select Service1.svc or Service1.svc.cs at the Solution Explorer and start debugging.
     public class ClientService : IClientService
     {
-        public void AddReservation(int seanceId, int clientId, int[] rows, int[] positions)
+        public void AddReservationMultiplePosition(int seanceId, int clientId, int[] rows, int[] positions)
         {
-            for (int i = 0; i < rows.Count(); i++)
+            try
             {
-                ReservationQueries.AddReservation(seanceId, clientId, rows[i], positions[i]);
+                for (int i = 0; i < rows.Count(); i++)
+                {
+                    if (ReservationQueries.ReservationExists(seanceId, rows[i], positions[i]))
+                    {
+                        ReservationQueries.AddReservation(seanceId, rows[i], positions[i], clientId);
+                    }
+                    else
+                    {
+                        throw new Exception("Rezerwacja już istnieje");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Wystąpił problem z wywołaniem żądania", ex);
             }
         }
 
-        public void AddReservation(int seanceId, int clientId, int row, int position)
+        public void AddReservationSinglePosition(int seanceId, int clientId, int row, int position)
         {
-            ReservationQueries.AddReservation(seanceId, clientId, row, position);
+            try
+            {
+                if (!ReservationQueries.ReservationExists(seanceId, row, position))
+                {
+                    ReservationQueries.AddReservation(seanceId, row, position, clientId);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Wystąpił problem z wywołaniem żądania", ex);
+            }
+        }
+
+        public void UpdateReservation(int reservationPositionId,int newRow,int newPosition)
+        {
+            ReservationQueries.UpdateReservation(reservationPositionId, newRow, newPosition);
         }
 
         public List<ReservationPositionModel> GetActualCinemaHallState(int seanceId)
         {
-            return ReservationQueries.GetReservationPositions(seanceId);
+            try
+            {
+                return ReservationQueries.GetReservationPositions(seanceId);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Wystąpił problem z wywołaniem żądania", ex);
+            }
         }
 
         public CinemaHallModel GetCinemaHall(int cinemaHallId)
         {
-            return CinemaHallsQueries.GetCinemaHall(cinemaHallId);
+            try
+            {
+                return CinemaHallsQueries.GetCinemaHall(cinemaHallId);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Wystąpił problem z wywołaniem żądania", ex);
+            }
         }
 
         public List<CinemaHallModel> GetCinemaHallsForMovie(MovieModel model)
         {
-            List<CinemaHallModel> cinemaHalls = new List<CinemaHallModel>();
-            List<int> cinemaHallsID = SeanceQueries.GetSeances(model.MovieID).Select(x => x.CinemaHallID).Distinct().ToList();
-            foreach(int cinemaHallID in cinemaHallsID)
+            try
             {
-                cinemaHalls.Add(CinemaHallsQueries.GetCinemaHall(cinemaHallID));
+                List<CinemaHallModel> cinemaHalls = new List<CinemaHallModel>();
+                List<int> cinemaHallsID = SeanceQueries.GetSeances(model.MovieID).Select(x => x.CinemaHallID).Distinct().ToList();
+                foreach (int cinemaHallID in cinemaHallsID)
+                {
+                    cinemaHalls.Add(CinemaHallsQueries.GetCinemaHall(cinemaHallID));
+                }
+                return cinemaHalls;
             }
-            return cinemaHalls;
+            catch (Exception ex)
+            {
+                throw new Exception("Wystąpił problem z wywołaniem żądania", ex);
+            }
         }
 
         public MovieModel GetMovie(int movieId)
         {
-            return MovieQueries.GetMovie(movieId);
+            try
+            {
+                return MovieQueries.GetMovie(movieId);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Wystąpił problem z wywołaniem żądania", ex);
+            }
         }
 
         public List<MovieModel> GetMovies()
         {
-            return MovieQueries.GetMovies();
+            try
+            {
+                return MovieQueries.GetMovies();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Wystąpił problem z wywołaniem żądania", ex);
+            }
         }
 
         public ReservationModel GetReservation(int reservationId)
         {
-            return ReservationQueries.GetReservation(reservationId);
+            try
+            {
+                return ReservationQueries.GetReservation(reservationId);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Wystąpił problem z wywołaniem żądania", ex);
+            }
         }
 
         public List<ReservationModel> GetReservations(int clientId)
         {
-            return ReservationQueries.GetReservations().Where(x => x.ClientID == clientId).ToList();
+            try
+            {
+                return ReservationQueries.GetReservations().Where(x => x.ClientID == clientId).ToList();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Wystąpił problem z wywołaniem żądania", ex);
+            }
         }
 
-        public List<SeanceModel> GetSeances(string title)
+        public List<SeanceModel> GetSeancesByTitle(string title)
         {
-            return SeanceQueries.GetSeances(title);
+            try
+            {
+                return SeanceQueries.GetSeances(title);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Wystąpił problem z wywołaniem żądania", ex);
+            }
         }
 
-        public List<SeanceModel> GetSeances(int movieId)
+        public List<SeanceModel> GetSeancesByMovieId(int movieId)
         {
-            return SeanceQueries.GetSeances(movieId);
+            try
+            {
+                return SeanceQueries.GetSeances(movieId);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Wystąpił problem z wywołaniem żądania", ex);
+            }
         }
 
         public ClientModel Login(string login, string password)
         {
-            ClientModel model = ClientQueries.Login(login, password);
-            if(model == null)
+            try
             {
-                throw new Exception("Nie istnieje użytkownik o podanych danych");
+                ClientModel model = ClientQueries.Login(login, password);
+                if (model == null)
+                {
+                    throw new Exception("Nie istnieje użytkownik o podanych danych");
+                }
+                return model;
             }
-            return model;
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
 
-        public void RemoveReservation(int reservationId)
+        public void RemoveReservation(int reservationId, int? row = null, int? position = null)
         {
-            ReservationQueries.RemoveReservation(reservationId);
-        }
-
-        public void RemoveReservation(int reservationId, int row, int position)
-        {
-            ReservationQueries.RemoveReservation(reservationId, row, position);
+            try
+            {
+                if (row.HasValue && position.HasValue)
+                {
+                    ReservationQueries.RemoveReservation(reservationId, row.Value, position.Value);
+                }
+                else
+                {
+                    ReservationQueries.RemoveReservation(reservationId);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Wystąpił problem z wywołaniem żądania", ex);
+            }
         }
 
         public void RemoveReservations(int reservationId, int[] rows, int[] positions)
         {
-            for(int i=0;i< rows.Count();i++)
+            try
             {
-                ReservationQueries.RemoveReservation(reservationId,rows[i],positions[i]);
+                for (int i = 0; i < rows.Count(); i++)
+                {
+                    ReservationQueries.RemoveReservation(reservationId, rows[i], positions[i]);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Wystąpił problem z wywołaniem żądania", ex);
             }
         }
     }

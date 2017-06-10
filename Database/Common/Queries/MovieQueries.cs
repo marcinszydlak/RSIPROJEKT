@@ -55,7 +55,6 @@ namespace Common.Queries
                     Opis = model.Description,
                     Rezyser = model.Regisseur,
                     RokWydania = model.PublicationDate,
-                    Tytul = model.Title,
                     Zdjecie = model.ImageContent,
                 });
             }

@@ -14,7 +14,7 @@ namespace Common.Queries
         {
             using (FilmyEntities db = new FilmyEntities())
             {
-                return db.Rezerwacje.Where(x => x.RezerwacjaID == ID).Select(x => new ReservationModel()
+                return db.Rezerwacje.Select(x => new ReservationModel()
                 {
                     ReservationID = x.RezerwacjaID,
                     ReservationDate = x.DataRezerwacji,
@@ -26,7 +26,25 @@ namespace Common.Queries
                         Position = y.Miejsce,
                         Row = y.Rzad,
                         ReservationPositionID = y.RezerwacjaMiejsceID
-                    }).ToList()
+                    }).ToList(),
+                    SeanceInfo = new SeanceModel()
+                    {
+                        CinemaHallID = x.Seanse.SalaID,
+                        MovieID = x.Seanse.FilmID,
+                        MovieInfo = new MovieModel()
+                        {
+                            MovieID = x.Seanse.Filmy.FilmID,
+                            Cast = x.Seanse.Filmy.Obsada,
+                            Description = x.Seanse.Filmy.Opis,
+                            ImageContent = x.Seanse.Filmy.Zdjecie,
+                            Note = x.Seanse.Filmy.Ocena,
+                            PublicationDate = x.Seanse.Filmy.RokWydania,
+                            Regisseur = x.Seanse.Filmy.Rezyser,
+                            Title = x.Seanse.Filmy.Tytul
+                        },
+                        SeanceDate = x.Seanse.DataSeansu
+
+                    }
                 }).FirstOrDefault();
             }
         }
@@ -46,7 +64,26 @@ namespace Common.Queries
                         Position = y.Miejsce,
                         Row = y.Rzad,
                         ReservationPositionID = y.RezerwacjaMiejsceID
-                    }).ToList()
+                    }).ToList(),
+                    SeanceInfo = new SeanceModel()
+                    {
+                        CinemaHallID = x.Seanse.SalaID,
+                        MovieID = x.Seanse.FilmID,
+                        MovieInfo = new MovieModel()
+                        {
+                            MovieID = x.Seanse.Filmy.FilmID,
+                            Cast = x.Seanse.Filmy.Obsada,
+                            Description = x.Seanse.Filmy.Opis,
+                            ImageContent = x.Seanse.Filmy.Zdjecie,
+                            Note = x.Seanse.Filmy.Ocena,
+                            PublicationDate = x.Seanse.Filmy.RokWydania,
+                            Regisseur = x.Seanse.Filmy.Rezyser,
+                            Title = x.Seanse.Filmy.Tytul
+                        },
+                        SeanceDate = x.Seanse.DataSeansu
+                        
+                    }
+                   
                 }).ToList();
             }
         }
@@ -63,26 +100,47 @@ namespace Common.Queries
                 }).ToList();
             }
         }
+        public static bool ReservationExists(int seanceID, int rzad, int miejsce)
+        {
+            using (FilmyEntities db = new FilmyEntities())
+            {
+                return db.RezerwacjeMiejsca.Where(x => x.Rezerwacje.SeansID == seanceID && x.Rzad == rzad && x.Miejsce == miejsce).FirstOrDefault() != null;
+            }
+        }
         public static void AddReservation(int seanceID,int rzad,int miejsce,int clientID)
         {
             using (FilmyEntities db = new FilmyEntities())
             {
-                Rezerwacje r = new Rezerwacje()
+                Rezerwacje r = db.Rezerwacje.Where(x => x.SeansID == seanceID && x.KlientID == clientID).FirstOrDefault();
+                if (r == null)
                 {
-                    DataRezerwacji = DateTime.Now,
-                    SeansID = seanceID,
-                    KlientID = clientID
-                   
-                };
-                db.Rezerwacje.Add(r);
-                db.SaveChanges();
+                    r = new Rezerwacje()
+                    {
+                        DataRezerwacji = DateTime.Now,
+                        SeansID = seanceID,
+                        KlientID = clientID
+                    };
 
+                    db.Rezerwacje.Add(r);
+                    db.SaveChanges();
+                }
+                int val = r.RezerwacjaID;
                 db.RezerwacjeMiejsca.Add(new RezerwacjeMiejsca()
                 {
-                    RezerwacjaID = r.RezerwacjaID,
+                    RezerwacjaID = val,
                     Miejsce = miejsce,
                     Rzad = rzad
                 });
+                db.SaveChanges();
+            }
+        }
+        public static void UpdateReservation(int reservationPositionID,int newRow,int newPosition)
+        {
+            using (FilmyEntities db = new FilmyEntities())
+            {
+                RezerwacjeMiejsca rezerwowane = db.RezerwacjeMiejsca.Where(x => x.RezerwacjaMiejsceID == reservationPositionID).FirstOrDefault();
+                rezerwowane.Rzad = newRow;
+                rezerwowane.Miejsce = newPosition;
                 db.SaveChanges();
             }
         }

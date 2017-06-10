@@ -14,6 +14,7 @@ namespace Common.Queries
         {
             using (FilmyEntities db = new FilmyEntities())
             {
+                
                 return db.Klienci.Where(x => x.Login == login && x.Haslo == password).Select(x => new ClientModel()
                 {
                     ClientID = x.KlientID,

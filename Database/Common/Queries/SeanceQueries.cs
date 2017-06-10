@@ -16,8 +16,10 @@ namespace Common.Queries
             {
                 return db.Seanse.Select(x => new SeanceModel()
                 {
+                    SeanceID = x.SeansID,
                     CinemaHallID = x.SalaID,
                     MovieID = x.FilmID,
+                    SeanceDate = x.DataSeansu,
                     MovieInfo = new MovieModel()
                     {
                         MovieID = x.FilmID,
@@ -38,8 +40,10 @@ namespace Common.Queries
             {
                 return db.Seanse.Where(x => x.Filmy.FilmID == movieID).Select(x => new SeanceModel()
                 {
+                    SeanceID = x.SeansID,
                     CinemaHallID = x.SalaID,
                     MovieID = x.FilmID,
+                    SeanceDate = x.DataSeansu,
                     MovieInfo = new MovieModel()
                     {
                         MovieID = x.FilmID,
@@ -60,8 +64,10 @@ namespace Common.Queries
             {
                 return db.Seanse.Where(x => x.Filmy.Tytul.Contains(title)).Select(x => new SeanceModel()
                 {
+                    SeanceID = x.SeansID,
                     CinemaHallID = x.SalaID,
                     MovieID = x.FilmID,
+                    SeanceDate = x.DataSeansu,
                     MovieInfo = new MovieModel()
                     {
                         MovieID = x.FilmID,
@@ -73,6 +79,7 @@ namespace Common.Queries
                         Regisseur = x.Filmy.Rezyser,
                         Title = x.Filmy.Tytul
                     }
+                    
                 }).ToList();
             }
         }
@@ -82,8 +89,10 @@ namespace Common.Queries
             {
                 return db.Seanse.Where(x => x.SeansID == seanceID).Select(x => new SeanceModel()
                 {
+                    SeanceID = x.SeansID,
                     CinemaHallID = x.SalaID,
                     MovieID = x.FilmID,
+                    SeanceDate = x.DataSeansu,
                     MovieInfo = new MovieModel()
                     {
                         MovieID = x.FilmID,

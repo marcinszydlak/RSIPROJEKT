@@ -15,21 +15,21 @@ namespace MovieServiceWCF
         [OperationContract]
         ClientModel Login(string login, string password);
         [OperationContract]
-        List<SeanceModel> GetSeances(int movieId);
+        List<SeanceModel> GetSeancesByMovieId(int movieId);
         [OperationContract]
-        List<SeanceModel> GetSeances(string title);
+        List<SeanceModel> GetSeancesByTitle(string title);
         [OperationContract]
-        void AddReservation(int seanceId,int clientId, int row, int position);
+        void AddReservationSinglePosition(int seanceId,int clientId, int row, int position);
         [OperationContract]
-        void AddReservation(int seanceId,int clientId, int[] rows, int[] positions);
+        void AddReservationMultiplePosition(int seanceId,int clientId, int[] rows, int[] positions);
+        [OperationContract]
+        void UpdateReservation(int reservationPositionId, int newRow, int newPosition);
         [OperationContract]
         ReservationModel GetReservation(int ReservationId);
         [OperationContract]
         List<ReservationModel> GetReservations(int clientId);
         [OperationContract]
-        void RemoveReservation(int reservationId);
-        [OperationContract]
-        void RemoveReservation(int reservationId, int row, int position);
+        void RemoveReservation(int reservationId, int? row = null, int? position = null);
         [OperationContract]
         void RemoveReservations(int reservationId, int[] rows, int[] positions);
         [OperationContract]
