@@ -42,8 +42,5 @@ namespace MovieServiceWCF
         List<CinemaHallModel> GetCinemaHallsForMovie(MovieModel model);
         [OperationContract]
         List<ReservationPositionModel> GetActualCinemaHallState(int seanceId);
-        
-
-        // TODO: Add your service operations here
     }
 }

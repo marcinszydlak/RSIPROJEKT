@@ -63,7 +63,7 @@
           <Property Name="DataSeansu" Type="datetime" Nullable="false" />
           <Property Name="SalaID" Type="int" Nullable="false" />
         </EntityType>
-        <Association Name="FK__Rezerwacj__Klien__5BE2A6F2">
+        <Association Name="FK__Rezerwacj__Klien__300424B4">
           <End Role="Klienci" Type="Self.Klienci" Multiplicity="1" />
           <End Role="Rezerwacje" Type="Self.Rezerwacje" Multiplicity="*" />
           <ReferentialConstraint>
@@ -75,7 +75,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Rezerwacj__Rezer__5EBF139D">
+        <Association Name="FK__Rezerwacj__Rezer__32E0915F">
           <End Role="Rezerwacje" Type="Self.Rezerwacje" Multiplicity="1" />
           <End Role="RezerwacjeMiejsca" Type="Self.RezerwacjeMiejsca" Multiplicity="*" />
           <ReferentialConstraint>
@@ -87,7 +87,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Rezerwacj__Seans__5AEE82B9">
+        <Association Name="FK__Rezerwacj__Seans__2F10007B">
           <End Role="Seanse" Type="Self.Seanse" Multiplicity="1" />
           <End Role="Rezerwacje" Type="Self.Rezerwacje" Multiplicity="*" />
           <ReferentialConstraint>
@@ -99,7 +99,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Seanse__FilmID__571DF1D5">
+        <Association Name="FK__Seanse__FilmID__2B3F6F97">
           <End Role="Filmy" Type="Self.Filmy" Multiplicity="1" />
           <End Role="Seanse" Type="Self.Seanse" Multiplicity="*" />
           <ReferentialConstraint>
@@ -111,7 +111,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Seanse__SalaID__5812160E">
+        <Association Name="FK__Seanse__SalaID__2C3393D0">
           <End Role="Sale" Type="Self.Sale" Multiplicity="1" />
           <End Role="Seanse" Type="Self.Seanse" Multiplicity="*" />
           <ReferentialConstraint>
@@ -130,23 +130,23 @@
           <EntitySet Name="RezerwacjeMiejsca" EntityType="Self.RezerwacjeMiejsca" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Sale" EntityType="Self.Sale" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Seanse" EntityType="Self.Seanse" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK__Rezerwacj__Klien__5BE2A6F2" Association="Self.FK__Rezerwacj__Klien__5BE2A6F2">
+          <AssociationSet Name="FK__Rezerwacj__Klien__300424B4" Association="Self.FK__Rezerwacj__Klien__300424B4">
             <End Role="Klienci" EntitySet="Klienci" />
             <End Role="Rezerwacje" EntitySet="Rezerwacje" />
           </AssociationSet>
-          <AssociationSet Name="FK__Rezerwacj__Rezer__5EBF139D" Association="Self.FK__Rezerwacj__Rezer__5EBF139D">
+          <AssociationSet Name="FK__Rezerwacj__Rezer__32E0915F" Association="Self.FK__Rezerwacj__Rezer__32E0915F">
             <End Role="Rezerwacje" EntitySet="Rezerwacje" />
             <End Role="RezerwacjeMiejsca" EntitySet="RezerwacjeMiejsca" />
           </AssociationSet>
-          <AssociationSet Name="FK__Rezerwacj__Seans__5AEE82B9" Association="Self.FK__Rezerwacj__Seans__5AEE82B9">
+          <AssociationSet Name="FK__Rezerwacj__Seans__2F10007B" Association="Self.FK__Rezerwacj__Seans__2F10007B">
             <End Role="Seanse" EntitySet="Seanse" />
             <End Role="Rezerwacje" EntitySet="Rezerwacje" />
           </AssociationSet>
-          <AssociationSet Name="FK__Seanse__FilmID__571DF1D5" Association="Self.FK__Seanse__FilmID__571DF1D5">
+          <AssociationSet Name="FK__Seanse__FilmID__2B3F6F97" Association="Self.FK__Seanse__FilmID__2B3F6F97">
             <End Role="Filmy" EntitySet="Filmy" />
             <End Role="Seanse" EntitySet="Seanse" />
           </AssociationSet>
-          <AssociationSet Name="FK__Seanse__SalaID__5812160E" Association="Self.FK__Seanse__SalaID__5812160E">
+          <AssociationSet Name="FK__Seanse__SalaID__2C3393D0" Association="Self.FK__Seanse__SalaID__2C3393D0">
             <End Role="Sale" EntitySet="Sale" />
             <End Role="Seanse" EntitySet="Seanse" />
           </AssociationSet>
